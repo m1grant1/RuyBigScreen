@@ -19,44 +19,30 @@
     body { background: radial-gradient(ellipse at center, #061a3a 0%, #02060f 70%); }
 
     /* ---------- 1. 背景粒子层 ---------- */
-    #particles {
-      position: fixed; inset: 0; z-index: 0;
-      pointer-events: none;
-    }
+    #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
 
-    /* ---------- 2. 大屏主体 ---------- */
+    /* ---------- 2. 大屏主体 ----------
+       顶部 90px | 顶部KPI自适应 | 主体 1fr | 底部 90px
+    */
     .screen {
       position: relative;
       width: 100vw; height: 100vh;
       display: grid;
-      grid-template-rows: 80px 1fr 40px;
+      grid-template-rows: 90px auto 1fr 90px;
       z-index: 1;
+      padding: 12px;
+      gap: 12px;
     }
 
-    /* ---------- 3. 顶部通栏 ---------- */
+    /* ---------- 3. 顶部通栏（拉满全宽） ---------- */
     .header {
       position: relative;
-      display: flex; align-items: center; justify-content: center;
+      display: grid;
+      grid-template-columns: 320px 1fr 320px;
+      align-items: center;
+      padding: 0 24px;
       background: linear-gradient(180deg, rgba(0,229,255,0.18) 0%, rgba(0,229,255,0) 100%);
     }
-    .header h1 {
-      font-size: 36px; font-weight: 800; letter-spacing: 4px;
-      background: linear-gradient(180deg, #ffffff 0%, #00e5ff 50%, #3aa6ff 100%);
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-      text-shadow: 0 0 20px rgba(0,229,255,0.4);
-    }
-    .header h1 small {
-      display: block; font-size: 14px; font-weight: 400;
-      letter-spacing: 6px; margin-top: 4px; opacity: 0.7;
-      color: #7fd6ff;
-    }
-    .header .time {
-      position: absolute; right: 24px; top: 18px;
-      font-size: 18px; color: #7fd6ff; letter-spacing: 1px;
-      font-family: "Consolas", monospace;
-    }
-    .header .time span { color: #00e5ff; font-weight: 700; }
-    /* 流光扫描边框 */
     .header::before {
       content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
       background: linear-gradient(90deg, transparent, #00e5ff, transparent);
@@ -64,33 +50,59 @@
       animation: scan 4s linear infinite;
     }
     @keyframes scan { 0% { background-position: -100% 0; } 100% { background-position: 100% 0; } }
+    .header .logo { display: flex; align-items: center; gap: 12px; }
+    .header .logo .ic {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: radial-gradient(circle, #00e5ff 0%, #3aa6ff 60%, transparent 70%);
+      box-shadow: 0 0 18px #00e5ff;
+    }
+    .header .logo .t { font-size: 14px; color: #7fd6ff; letter-spacing: 2px; }
+    .header h1 {
+      font-size: 38px; font-weight: 800; letter-spacing: 6px;
+      text-align: center;
+      background: linear-gradient(180deg, #ffffff 0%, #00e5ff 50%, #3aa6ff 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      text-shadow: 0 0 24px rgba(0,229,255,0.4);
+    }
+    .header h1 small {
+      display: block; font-size: 13px; font-weight: 400;
+      letter-spacing: 8px; margin-top: 2px; opacity: 0.8;
+      color: #7fd6ff;
+    }
+    .header .time { text-align: right; font-size: 18px; color: #7fd6ff; letter-spacing: 1px; font-family: "Consolas", monospace; }
+    .header .time .d { font-size: 13px; color: #6aa9d6; }
+    .header .time b { color: #00e5ff; font-weight: 700; font-size: 22px; margin-left: 4px; }
+    .header .weather { position: absolute; right: 24px; bottom: 6px; font-size: 11px; color: #6aa9d6; }
 
-    /* ---------- 4. 主体内容三栏布局 ---------- */
+    /* ---------- 4. 顶部 KPI 行（6 个一排） ---------- */
+    .top-kpis { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+
+    /* ---------- 5. 主体三列布局 ---------- */
     .main {
       display: grid;
-      grid-template-columns: 380px 1fr 380px;
-      gap: 16px;
-      padding: 16px;
+      grid-template-columns: 1fr 1.4fr 1fr;
+      gap: 12px;
+      min-height: 0;
     }
+    .col { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
 
-    /* ---------- 5. 通用卡片 ---------- */
+    /* ---------- 6. 通用卡片 ---------- */
     .card {
       position: relative;
       background: linear-gradient(160deg, rgba(0,40,90,0.55) 0%, rgba(2,10,30,0.55) 100%);
       border: 1px solid rgba(0,229,255,0.25);
       border-radius: 8px;
-      padding: 14px 16px;
+      padding: 12px 14px;
       backdrop-filter: blur(4px);
       opacity: 0; transform: translateY(20px);
       animation: fadeUp 0.8s forwards;
+      display: flex; flex-direction: column;
     }
     .card::before {
-      /* 顶部渐变条 */
       content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 2px;
       background: linear-gradient(90deg, transparent, #00e5ff, transparent);
     }
     .card::after {
-      /* 四角装饰 */
       content: ''; position: absolute; inset: 4px;
       border-radius: 6px;
       background:
@@ -105,60 +117,62 @@
       opacity: 0.5; pointer-events: none;
     }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-
     .card-title {
       display: flex; align-items: center; gap: 8px;
-      font-size: 16px; font-weight: 700; color: #ffffff;
-      padding-bottom: 8px; margin-bottom: 8px;
+      font-size: 15px; font-weight: 700; color: #ffffff;
+      padding-bottom: 6px; margin-bottom: 8px;
       border-bottom: 1px solid rgba(0,229,255,0.15);
     }
     .card-title::before {
-      content: ''; width: 4px; height: 16px; background: linear-gradient(180deg, #00e5ff, #3aa6ff);
+      content: ''; width: 4px; height: 14px; background: linear-gradient(180deg, #00e5ff, #3aa6ff);
       box-shadow: 0 0 8px #00e5ff;
     }
-    .card-title .en { font-size: 11px; color: #6aa9d6; font-weight: 400; margin-left: auto; letter-spacing: 1px; }
+    .card-title .en { font-size: 10px; color: #6aa9d6; font-weight: 400; margin-left: auto; letter-spacing: 1px; }
+    .card-title .tag { font-size: 11px; color: #00ffa3; margin-left: auto; }
+    .card-body { flex: 1; min-height: 0; position: relative; }
+    .chart { width: 100%; height: 100%; }
 
-    /* ---------- 6. 左侧 / 右侧 栏 ---------- */
-    .col { display: flex; flex-direction: column; gap: 16px; }
-
-    /* ---------- 7. 核心指标卡 ---------- */
-    .kpi-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-    }
-    .kpi {
-      position: relative; padding: 14px 10px; text-align: center;
-      background: linear-gradient(160deg, rgba(0,229,255,0.08) 0%, rgba(0,80,160,0.08) 100%);
+    /* ---------- 7. 顶部 KPI 横卡 ---------- */
+    .kpi-h {
+      position: relative; padding: 12px 16px;
+      background: linear-gradient(160deg, rgba(0,229,255,0.1) 0%, rgba(0,80,160,0.1) 100%);
       border: 1px solid rgba(0,229,255,0.3);
       border-radius: 6px;
+      display: grid; grid-template-columns: 50px 1fr auto; align-items: center; gap: 10px;
     }
-    .kpi .label { font-size: 12px; color: #7fd6ff; margin-bottom: 6px; }
-    .kpi .value {
-      font-size: 26px; font-weight: 800; color: #ffffff;
+    .kpi-h .ic {
+      width: 46px; height: 46px; border-radius: 6px;
+      background: linear-gradient(135deg, rgba(0,229,255,0.25), rgba(58,166,255,0.25));
+      border: 1px solid rgba(0,229,255,0.4);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .kpi-h .label { font-size: 12px; color: #7fd6ff; }
+    .kpi-h .value {
+      font-size: 28px; font-weight: 800; color: #ffffff; line-height: 1.1;
       font-family: "Consolas", monospace;
       text-shadow: 0 0 10px rgba(0,229,255,0.5);
     }
-    .kpi .unit { font-size: 12px; color: #6aa9d6; margin-left: 2px; }
-    .kpi .delta { font-size: 11px; margin-top: 4px; }
-    .kpi .delta.up   { color: #00ffa3; }
-    .kpi .delta.down { color: #ff5d5d; }
+    .kpi-h .value .u { font-size: 12px; color: #6aa9d6; margin-left: 2px; font-weight: 400; }
+    .kpi-h .delta { font-size: 12px; }
+    .kpi-h .delta.up { color: #00ffa3; }
+    .kpi-h .delta.down { color: #ff5d5d; }
 
     /* ---------- 8. 中部主区 ---------- */
-    .center { display: flex; flex-direction: column; gap: 16px; }
-    .map-wrap { flex: 1; min-height: 380px; }
-    .map-wrap .chart { width: 100%; height: 100%; }
-    .sub-charts {
-      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;
-      height: 220px;
+    .center { display: flex; flex-direction: column; gap: 12px; min-height: 0; }
+    .map-wrap { flex: 1; min-height: 0; }
+    .center-bottom {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;
+      height: 240px;
     }
+    .center-bottom > .card { height: 100%; }
 
     /* ---------- 9. 滚动榜单 ---------- */
-    .rank {
-      height: 280px; overflow: hidden; position: relative;
-    }
+    .rank { height: 100%; overflow: hidden; position: relative; }
     .rank-list { position: absolute; left: 0; right: 0; top: 0; }
     .rank-item {
       display: grid; grid-template-columns: 30px 1fr 90px 70px;
-      align-items: center; padding: 8px 6px;
+      align-items: center; padding: 7px 4px;
       font-size: 13px; color: #cfe8ff;
       border-bottom: 1px dashed rgba(0,229,255,0.12);
     }
@@ -174,27 +188,45 @@
     .rank-item .num { color: #00e5ff; text-align: right; font-family: "Consolas", monospace; }
     .rank-item .bar { color: #6aa9d6; text-align: right; font-size: 11px; }
 
-    /* ---------- 10. 底部 ---------- */
-    .footer {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px; font-size: 12px; color: #6aa9d6;
-      border-top: 1px solid rgba(0,229,255,0.1);
+    /* ---------- 10. 底部：4 块 KPI + 信息条 ---------- */
+    .footer { display: grid; grid-template-columns: repeat(4, 1fr) 320px; gap: 12px; }
+    .footer .stat {
+      position: relative;
+      background: linear-gradient(160deg, rgba(0,229,255,0.08) 0%, rgba(0,80,160,0.05) 100%);
+      border: 1px solid rgba(0,229,255,0.2);
+      border-radius: 6px;
+      padding: 10px 16px;
+      display: flex; align-items: center; gap: 14px;
     }
-    .footer .links span { margin: 0 8px; }
-    .footer .copy { color: #00e5ff; }
+    .footer .stat .ic {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: radial-gradient(circle, #00e5ff 0%, #3aa6ff 70%, transparent 80%);
+      box-shadow: 0 0 10px #00e5ff;
+      flex: 0 0 auto;
+    }
+    .footer .stat .info { flex: 1; }
+    .footer .stat .lbl { font-size: 12px; color: #7fd6ff; }
+    .footer .stat .val {
+      font-size: 22px; font-weight: 800; color: #ffffff; line-height: 1.1;
+      font-family: "Consolas", monospace;
+      text-shadow: 0 0 8px rgba(0,229,255,0.4);
+    }
+    .footer .stat .val .u { font-size: 11px; color: #6aa9d6; margin-left: 2px; font-weight: 400; }
+    .footer .stat .delta { font-size: 11px; }
+    .footer .stat .delta.up { color: #00ffa3; }
+    .footer .stat .delta.down { color: #ff5d5d; }
+    .footer .info-bar {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 0 16px;
+      border-left: 1px solid rgba(0,229,255,0.15);
+      font-size: 11px; color: #6aa9d6;
+    }
+    .footer .info-bar b { color: #00e5ff; }
 
-    /* ---------- 11. chart 通用容器 ---------- */
-    .chart { width: 100%; height: 100%; }
-
-    /* ---------- 12. 错峰动画 ---------- */
-    .delay-1 { animation-delay: 0.1s; }
-    .delay-2 { animation-delay: 0.2s; }
-    .delay-3 { animation-delay: 0.3s; }
-    .delay-4 { animation-delay: 0.4s; }
-    .delay-5 { animation-delay: 0.5s; }
-    .delay-6 { animation-delay: 0.6s; }
-    .delay-7 { animation-delay: 0.7s; }
-    .delay-8 { animation-delay: 0.8s; }
+    /* ---------- 11. 错峰动画 ---------- */
+    .delay-1 { animation-delay: 0.1s; } .delay-2 { animation-delay: 0.2s; } .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; } .delay-5 { animation-delay: 0.5s; } .delay-6 { animation-delay: 0.6s; }
+    .delay-7 { animation-delay: 0.7s; } .delay-8 { animation-delay: 0.8s; }
   </style>
 </head>
 <body>
@@ -202,86 +234,171 @@
   <canvas id="particles"></canvas>
 
   <div class="screen">
-    <!-- ============ 顶部 ============ -->
-    <div class="header">
-      <h1>如意数据大屏<small>RUYI BIG SCREEN · 企业运营指挥中心</small></h1>
-      <div class="time" id="timeBox">--年--月--日 <span>--:--:--</span></div>
+    <!-- ============ 顶部通栏 ============ -->
+    <div class="header delay-1">
+      <div class="logo">
+        <div class="ic"></div>
+        <div>
+          <div class="t">ENTERPRISE OPS</div>
+          <div class="t" style="font-size:11px;opacity:.6;">运营指挥中心</div>
+        </div>
+      </div>
+      <h1>如意数据大屏<small>RUYI BIG SCREEN · 通用综合型企业运营驾驶舱</small></h1>
+      <div class="time">
+        <div class="d" id="dateBox">--年--月--日 星期--</div>
+        <div><b id="timeBox">--:--:--</b></div>
+        <div class="weather">晴 25°C · 北京 · 空气质量 良</div>
+      </div>
+    </div>
+
+    <!-- ============ 顶部 6 个 KPI 横卡 ============ -->
+    <div class="top-kpis">
+      <div class="kpi-h delay-1">
+        <div class="ic">💰</div>
+        <div>
+          <div class="label">今日销售额</div>
+          <div class="value" data-target="1284567">0<span class="u">元</span></div>
+        </div>
+        <div class="delta up">▲ 12.4%</div>
+      </div>
+      <div class="kpi-h delay-2">
+        <div class="ic">📦</div>
+        <div>
+          <div class="label">今日订单数</div>
+          <div class="value" data-target="34892">0<span class="u">单</span></div>
+        </div>
+        <div class="delta up">▲ 8.7%</div>
+      </div>
+      <div class="kpi-h delay-3">
+        <div class="ic">👥</div>
+        <div>
+          <div class="label">活跃用户</div>
+          <div class="value" data-target="56924">0<span class="u">人</span></div>
+        </div>
+        <div class="delta down">▼ 0.8%</div>
+      </div>
+      <div class="kpi-h delay-4">
+        <div class="ic">📈</div>
+        <div>
+          <div class="label">同比增长率</div>
+          <div class="value" data-target="23.6">0<span class="u">%</span></div>
+        </div>
+        <div class="delta up">▲ 1.2%</div>
+      </div>
+      <div class="kpi-h delay-5">
+        <div class="ic">💎</div>
+        <div>
+          <div class="label">客单价</div>
+          <div class="value" data-target="368">0<span class="u">元</span></div>
+        </div>
+        <div class="delta up">▲ 3.5%</div>
+      </div>
+      <div class="kpi-h delay-6">
+        <div class="ic">⭐</div>
+        <div>
+          <div class="label">转化率</div>
+          <div class="value" data-target="4.82">0<span class="u">%</span></div>
+        </div>
+        <div class="delta up">▲ 0.6%</div>
+      </div>
     </div>
 
     <!-- ============ 主体 ============ -->
     <div class="main">
       <!-- 左列 -->
       <div class="col">
-        <!-- 核心指标卡 -->
-        <div class="card delay-1">
-          <div class="card-title">核心总览<span class="en">CORE OVERVIEW</span></div>
-          <div class="kpi-grid">
-            <div class="kpi"><div class="label">总数据量</div><div class="value" data-target="1284567">0</div><div class="unit">条</div><div class="delta up">▲ 12.4%</div></div>
-            <div class="kpi"><div class="label">今日增量</div><div class="value" data-target="34892">0</div><div class="unit">条</div><div class="delta up">▲ 8.7%</div></div>
-            <div class="kpi"><div class="label">同比增长率</div><div class="value" data-target="23.6">0</div><div class="unit">%</div><div class="delta up">▲ 1.2%</div></div>
-            <div class="kpi"><div class="label">活跃用户</div><div class="value" data-target="56924">0</div><div class="unit">人</div><div class="delta down">▼ 0.8%</div></div>
-          </div>
-        </div>
-
-        <!-- 趋势对比 -->
-        <div class="card delay-3" style="flex:1;">
+        <div class="card delay-2" style="flex:1;">
           <div class="card-title">销售/订单趋势<span class="en">SALES TREND</span></div>
-          <div id="chartLine" class="chart"></div>
+          <div class="card-body"><div id="chartLine" class="chart"></div></div>
         </div>
-
-        <!-- 销售榜单 -->
-        <div class="card delay-5">
+        <div class="card delay-3" style="flex:1;">
           <div class="card-title">销售业绩 TOP10<span class="en">RANKING</span></div>
-          <div class="rank"><div class="rank-list" id="rankList"></div></div>
+          <div class="card-body"><div class="rank"><div class="rank-list" id="rankList"></div></div></div>
+        </div>
+        <div class="card delay-4" style="flex:1;">
+          <div class="card-title">多维能力评估<span class="en">RADAR</span></div>
+          <div class="card-body"><div id="chartRadar" class="chart"></div></div>
         </div>
       </div>
 
       <!-- 中列 -->
       <div class="center">
-        <!-- 中国地图 -->
         <div class="card map-wrap delay-2">
-          <div class="card-title">全国销售分布<span class="en">CHINA MAP</span></div>
-          <div id="chartMap" class="chart"></div>
+          <div class="card-title">全国销售分布热力图<span class="en">CHINA MAP</span><span class="tag">● 实时</span></div>
+          <div class="card-body"><div id="chartMap" class="chart"></div></div>
         </div>
-
-        <!-- 子图三联 -->
-        <div class="sub-charts">
-          <div class="card delay-4"><div class="card-title">类目销量<span class="en">CATEGORY</span></div><div id="chartBar" class="chart"></div></div>
-          <div class="card delay-6"><div class="card-title">完成率<span class="en">PROGRESS</span></div><div id="chartGauge" class="chart"></div></div>
-          <div class="card delay-7"><div class="card-title">流量来源<span class="en">SOURCE</span></div><div id="chartPie" class="chart"></div></div>
+        <div class="center-bottom">
+          <div class="card delay-3">
+            <div class="card-title">类目销量<span class="en">CATEGORY</span></div>
+            <div class="card-body"><div id="chartBar" class="chart"></div></div>
+          </div>
+          <div class="card delay-4">
+            <div class="card-title">目标完成率<span class="en">PROGRESS</span></div>
+            <div class="card-body"><div id="chartGauge" class="chart"></div></div>
+          </div>
+          <div class="card delay-5">
+            <div class="card-title">流量来源<span class="en">SOURCE</span></div>
+            <div class="card-body"><div id="chartPie" class="chart"></div></div>
+          </div>
         </div>
       </div>
 
       <!-- 右列 -->
       <div class="col">
-        <!-- 环形占比 -->
-        <div class="card delay-2" style="height:280px;">
-          <div class="card-title">渠道占比<span class="en">CHANNEL RATIO</span></div>
-          <div id="chartRing" class="chart"></div>
+        <div class="card delay-2" style="flex:1;">
+          <div class="card-title">渠道占比<span class="en">CHANNEL</span></div>
+          <div class="card-body"><div id="chartRing" class="chart"></div></div>
         </div>
-
-        <!-- 能力雷达 -->
-        <div class="card delay-4" style="flex:1;">
-          <div class="card-title">多维能力<span class="en">RADAR</span></div>
-          <div id="chartRadar" class="chart"></div>
-        </div>
-
-        <!-- 类目占比 -->
-        <div class="card delay-6">
+        <div class="card delay-3" style="flex:1;">
           <div class="card-title">商品类目占比<span class="en">CATEGORY MIX</span></div>
-          <div id="chartHBar" class="chart" style="height:200px;"></div>
+          <div class="card-body"><div id="chartHBar" class="chart"></div></div>
+        </div>
+        <div class="card delay-4" style="flex:1;">
+          <div class="card-title">实时交易流<span class="en">TRADE FLOW</span><span class="tag">● LIVE</span></div>
+          <div class="card-body"><div id="chartScatter" class="chart"></div></div>
         </div>
       </div>
     </div>
 
-    <!-- ============ 底部 ============ -->
-    <div class="footer">
-      <div class="links">
-        <span>数据来源：内部业务系统</span><span>·</span>
-        <span>更新频率：实时</span><span>·</span>
-        <span>数据时间：<span id="updTime">--</span></span>
+    <!-- ============ 底部：4 个统计 + 信息条 ============ -->
+    <div class="footer delay-7">
+      <div class="stat">
+        <div class="ic"></div>
+        <div class="info">
+          <div class="lbl">本月访问量</div>
+          <div class="val" data-target="8642153">0<span class="u">次</span></div>
+          <div class="delta up">▲ 18.2%</div>
+        </div>
       </div>
-      <div class="copy">© 2026 RuyiBigScreen · MIT License</div>
+      <div class="stat">
+        <div class="ic"></div>
+        <div class="info">
+          <div class="lbl">注册用户总数</div>
+          <div class="val" data-target="1284652">0<span class="u">人</span></div>
+          <div class="delta up">▲ 5.6%</div>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="ic"></div>
+        <div class="info">
+          <div class="lbl">在线设备数</div>
+          <div class="val" data-target="38429">0<span class="u">台</span></div>
+          <div class="delta up">▲ 2.3%</div>
+        </div>
+      </div>
+      <div class="stat">
+        <div class="ic"></div>
+        <div class="info">
+          <div class="lbl">系统可用率</div>
+          <div class="val" data-target="99.98">0<span class="u">%</span></div>
+          <div class="delta up">▲ 0.02%</div>
+        </div>
+      </div>
+      <div class="info-bar">
+        <div>数据来源：<b>内部业务系统</b></div>
+        <div>更新频率：<b>实时</b> · 数据时间：<b id="updTime">--</b></div>
+        <div>© 2026 <b>RuyiBigScreen</b> · MIT License</div>
+      </div>
     </div>
   </div>
 
@@ -295,78 +412,62 @@
    * 一、全局配置 & 工具函数
    * ========================================================== */
   const COLOR = {
-    bg:    'transparent',
-    text:  '#cfe8ff',
-    sub:   '#6aa9d6',
-    axis:  'rgba(0,229,255,0.25)',
-    cyan:  '#00e5ff',
-    blue:  '#3aa6ff',
-    purple:'#7c5cff',
-    green: '#00ffa3',
-    red:   '#ff5d5d',
-    gold:  '#ffd76a'
+    text:'#cfe8ff', sub:'#6aa9d6', axis:'rgba(0,229,255,0.25)',
+    cyan:'#00e5ff', blue:'#3aa6ff', purple:'#7c5cff',
+    green:'#00ffa3', red:'#ff5d5d', gold:'#ffd76a'
   };
-
-  // ECharts 通用主题
   const baseOpt = {
     textStyle: { color: COLOR.text, fontFamily: 'Microsoft YaHei, sans-serif' },
     grid: { left: 36, right: 16, top: 36, bottom: 28, containLabel: true }
   };
-
-  // 简单随机数
   const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-
-  // 千分位
   const fmt = n => n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-  // 时间格式化
   const pad = n => String(n).padStart(2, '0');
-  function formatDate(d) {
-    return `${d.getFullYear()}年${pad(d.getMonth()+1)}月${pad(d.getDate())}日 ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-  }
+  const weekMap = ['日','一','二','三','四','五','六'];
 
   /* ============================================================
    * 二、顶部时间
    * ========================================================== */
   const timeBox = document.getElementById('timeBox');
+  const dateBox = document.getElementById('dateBox');
   function tickTime() {
     const d = new Date();
-    timeBox.innerHTML = `${d.getFullYear()}年${pad(d.getMonth()+1)}月${pad(d.getDate())}日 <span>${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}</span>`;
+    timeBox.textContent = `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+    dateBox.textContent = `${d.getFullYear()}年${pad(d.getMonth()+1)}月${pad(d.getDate())}日 星期${weekMap[d.getDay()]}`;
     document.getElementById('updTime').textContent =
       `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
   }
-  tickTime();
-  setInterval(tickTime, 1000);
+  tickTime(); setInterval(tickTime, 1000);
 
   /* ============================================================
    * 三、数字滚动 + 微调浮动
    * ========================================================== */
   function animateNumber(el, target, duration = 1500, decimals = 0) {
-    const start = performance.now();
-    const startVal = 0;
+    const start = performance.now(); const startVal = 0;
     function step(now) {
       const p = Math.min(1, (now - start) / duration);
-      const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+      const eased = 1 - Math.pow(1 - p, 3);
       const cur = startVal + (target - startVal) * eased;
-      el.textContent = decimals > 0 ? cur.toFixed(decimals) : fmt(Math.floor(cur));
+      el.innerHTML = (decimals > 0 ? cur.toFixed(decimals) : fmt(Math.floor(cur))) + (el.dataset.unit || '');
       if (p < 1) requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
   }
-  document.querySelectorAll('.kpi .value').forEach(el => {
+  document.querySelectorAll('[data-target]').forEach(el => {
     const t = parseFloat(el.dataset.target);
     const dec = t % 1 !== 0 ? 1 : 0;
+    const unitEl = el.querySelector('.u');
+    if (unitEl) el.dataset.unit = unitEl.outerHTML;
     animateNumber(el, t, 1500, dec);
   });
 
-  // 每秒微调浮动
   setInterval(() => {
-    document.querySelectorAll('.kpi .value').forEach(el => {
+    document.querySelectorAll('[data-target]').forEach(el => {
       const t = parseFloat(el.dataset.target);
       const dec = t % 1 !== 0 ? 1 : 0;
       const drift = t * 0.002;
       const v = t + (Math.random() - 0.5) * drift * 2;
-      el.textContent = dec > 0 ? v.toFixed(dec) : fmt(Math.floor(v));
+      el.innerHTML = (dec > 0 ? v.toFixed(dec) : fmt(Math.floor(v))) + (el.dataset.unit || '');
     });
   }, 1500);
 
@@ -387,38 +488,21 @@
     grid: { left: 36, right: 16, top: 30, bottom: 24, containLabel: true },
     tooltip: { trigger: 'axis', backgroundColor: 'rgba(2,10,30,0.9)', borderColor: COLOR.cyan, textStyle: { color: '#fff' } },
     legend: { textStyle: { color: COLOR.text }, top: 0, right: 0, itemWidth: 10, itemHeight: 10 },
-    xAxis: {
-      type: 'category', data: ['周一','周二','周三','周四','周五','周六','周日'],
-      axisLine: { lineStyle: { color: COLOR.axis } },
-      axisLabel: { color: COLOR.sub, fontSize: 11 }
-    },
-    yAxis: {
-      type: 'value',
-      axisLine: { show: false },
-      splitLine: { lineStyle: { color: 'rgba(0,229,255,0.08)' } },
-      axisLabel: { color: COLOR.sub, fontSize: 11 }
-    },
+    xAxis: { type: 'category', data: ['周一','周二','周三','周四','周五','周六','周日'],
+      axisLine: { lineStyle: { color: COLOR.axis } }, axisLabel: { color: COLOR.sub, fontSize: 11 } },
+    yAxis: { type: 'value', axisLine: { show: false },
+      splitLine: { lineStyle: { color: 'rgba(0,229,255,0.08)' } }, axisLabel: { color: COLOR.sub, fontSize: 11 } },
     series: [
-      {
-        name: '销售额', type: 'line', smooth: true, symbol: 'circle', symbolSize: 6,
+      { name: '销售额', type: 'line', smooth: true, symbol: 'circle', symbolSize: 6,
         lineStyle: { width: 3, color: COLOR.cyan, shadowBlur: 8, shadowColor: COLOR.cyan },
         itemStyle: { color: COLOR.cyan },
-        areaStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1, [
-          { offset: 0, color: 'rgba(0,229,255,0.5)' },
-          { offset: 1, color: 'rgba(0,229,255,0)' }
-        ])},
-        data: [320, 482, 396, 510, 680, 720, 650]
-      },
-      {
-        name: '订单数', type: 'line', smooth: true, symbol: 'circle', symbolSize: 6,
+        areaStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1, [{offset:0,color:'rgba(0,229,255,0.5)'},{offset:1,color:'rgba(0,229,255,0)'}]) },
+        data: [320, 482, 396, 510, 680, 720, 650] },
+      { name: '订单数', type: 'line', smooth: true, symbol: 'circle', symbolSize: 6,
         lineStyle: { width: 3, color: COLOR.purple, shadowBlur: 8, shadowColor: COLOR.purple },
         itemStyle: { color: COLOR.purple },
-        areaStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1, [
-          { offset: 0, color: 'rgba(124,92,255,0.4)' },
-          { offset: 1, color: 'rgba(124,92,255,0)' }
-        ])},
-        data: [210, 302, 281, 340, 420, 460, 410]
-      }
+        areaStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1, [{offset:0,color:'rgba(124,92,255,0.4)'},{offset:1,color:'rgba(124,92,255,0)'}]) },
+        data: [210, 302, 281, 340, 420, 460, 410] }
     ]
   });
 
@@ -426,149 +510,84 @@
   initChart('chartMap', {
     tooltip: { trigger: 'item', backgroundColor: 'rgba(2,10,30,0.9)', borderColor: COLOR.cyan, textStyle: { color: '#fff' },
       formatter: p => p.name ? `${p.name}<br/>销售额：${fmt(p.value || rnd(2000,80000))} 万` : '' },
-    visualMap: {
-      min: 0, max: 80000, left: 20, bottom: 20,
+    visualMap: { min: 0, max: 80000, left: 20, bottom: 20,
       inRange: { color: ['#0a2a6a', '#1064ff', '#00e5ff', '#ffd76a', '#ff5d5d'] },
-      textStyle: { color: COLOR.sub, fontSize: 10 }, calculable: true, itemHeight: 80
-    },
-    series: [{
-      name: '销售额', type: 'map', map: 'china', roam: false, zoom: 1.2,
-      label: { show: false },
+      textStyle: { color: COLOR.sub, fontSize: 10 }, calculable: true, itemHeight: 80 },
+    series: [{ name: '销售额', type: 'map', map: 'china', roam: false, zoom: 1.2, label: { show: false },
       itemStyle: { areaColor: 'rgba(0,80,160,0.3)', borderColor: 'rgba(0,229,255,0.5)', borderWidth: 1 },
       emphasis: { label: { show: true, color: '#fff' }, itemStyle: { areaColor: '#3aa6ff' } },
-      data: [
-        {name:'北京', value:78000},{name:'上海', value:76000},{name:'广东', value:72000},
-        {name:'浙江', value:58000},{name:'江苏', value:56000},{name:'四川', value:42000},
-        {name:'山东', value:40000},{name:'湖北', value:36000},{name:'福建', value:34000},
-        {name:'河南', value:32000},{name:'湖南', value:30000},{name:'河北', value:28000},
-        {name:'陕西', value:26000},{name:'辽宁', value:24000},{name:'重庆', value:22000},
-        {name:'安徽', value:20000},{name:'江西', value:18000},{name:'云南', value:16000}
-      ]
-    }]
+      data: [{name:'北京',value:78000},{name:'上海',value:76000},{name:'广东',value:72000},
+        {name:'浙江',value:58000},{name:'江苏',value:56000},{name:'四川',value:42000},
+        {name:'山东',value:40000},{name:'湖北',value:36000},{name:'福建',value:34000},
+        {name:'河南',value:32000},{name:'湖南',value:30000},{name:'河北',value:28000},
+        {name:'陕西',value:26000},{name:'辽宁',value:24000},{name:'重庆',value:22000},
+        {name:'安徽',value:20000},{name:'江西',value:18000},{name:'云南',value:16000}] }]
   });
 
   // 3) 类目柱状
   initChart('chartBar', {
     grid: { left: 36, right: 8, top: 10, bottom: 24, containLabel: true },
     tooltip: { trigger: 'axis', backgroundColor: 'rgba(2,10,30,0.9)', borderColor: COLOR.cyan, textStyle: { color: '#fff' } },
-    xAxis: {
-      type: 'category', data: ['家电','服饰','食品','数码','美妆','母婴'],
-      axisLine: { lineStyle: { color: COLOR.axis } },
-      axisLabel: { color: COLOR.sub, fontSize: 11 }
-    },
-    yAxis: {
-      type: 'value',
-      axisLine: { show: false },
-      splitLine: { lineStyle: { color: 'rgba(0,229,255,0.08)' } },
-      axisLabel: { color: COLOR.sub, fontSize: 11 }
-    },
-    series: [{
-      type: 'bar', barWidth: 14,
-      data: [420, 380, 320, 510, 290, 220],
-      itemStyle: {
-        borderRadius: [4, 4, 0, 0],
-        color: new echarts.graphic.LinearGradient(0,0,0,1, [
-          { offset: 0, color: COLOR.cyan },
-          { offset: 1, color: 'rgba(0,229,255,0.1)' }
-        ])
-      }
-    }]
+    xAxis: { type: 'category', data: ['家电','服饰','食品','数码','美妆','母婴'],
+      axisLine: { lineStyle: { color: COLOR.axis } }, axisLabel: { color: COLOR.sub, fontSize: 11 } },
+    yAxis: { type: 'value', axisLine: { show: false },
+      splitLine: { lineStyle: { color: 'rgba(0,229,255,0.08)' } }, axisLabel: { color: COLOR.sub, fontSize: 11 } },
+    series: [{ type: 'bar', barWidth: 14, data: [420, 380, 320, 510, 290, 220],
+      itemStyle: { borderRadius: [4, 4, 0, 0],
+        color: new echarts.graphic.LinearGradient(0,0,0,1, [{offset:0,color:COLOR.cyan},{offset:1,color:'rgba(0,229,255,0.1)'}]) } }]
   });
 
   // 4) 仪表盘
   initChart('chartGauge', {
-    series: [{
-      type: 'gauge',
-      radius: '92%',
-      startAngle: 210, endAngle: -30,
-      min: 0, max: 100,
-      axisLine: {
-        lineStyle: {
-          width: 12,
-          color: [
-            [0.6, '#00e5ff'],
-            [0.85, '#3aa6ff'],
-            [1, '#ff5d5d']
-          ]
-        }
-      },
-      pointer: { length: '60%', width: 4, itemStyle: { color: '#fff' } },
-      axisTick: { show: false },
+    series: [{ type: 'gauge', radius: '92%', startAngle: 210, endAngle: -30, min: 0, max: 100,
+      axisLine: { lineStyle: { width: 12, color: [[0.6,'#00e5ff'],[0.85,'#3aa6ff'],[1,'#ff5d5d']] } },
+      pointer: { length: '60%', width: 4, itemStyle: { color: '#fff' } }, axisTick: { show: false },
       splitLine: { length: 8, lineStyle: { color: 'rgba(0,229,255,0.5)' } },
       axisLabel: { color: COLOR.sub, fontSize: 10, distance: -22 },
       title: { offsetCenter: [0, '70%'], color: COLOR.sub, fontSize: 12 },
-      detail: {
-        offsetCenter: [0, '0%'],
-        formatter: '{value}%',
-        color: '#fff', fontSize: 26, fontWeight: 700,
-        textShadowBlur: 8, textShadowColor: COLOR.cyan
-      },
-      data: [{ value: 78, name: '完成率' }]
-    }]
+      detail: { offsetCenter: [0, '0%'], formatter: '{value}%', color: '#fff', fontSize: 26, fontWeight: 700,
+        textShadowBlur: 8, textShadowColor: COLOR.cyan },
+      data: [{ value: 78, name: '完成率' }] }]
   });
 
   // 5) 饼图 流量来源
   initChart('chartPie', {
     tooltip: { trigger: 'item', backgroundColor: 'rgba(2,10,30,0.9)', borderColor: COLOR.cyan, textStyle: { color: '#fff' } },
     legend: { orient: 'vertical', right: 4, top: 'center', textStyle: { color: COLOR.text, fontSize: 11 }, itemWidth: 8, itemHeight: 8 },
-    series: [{
-      type: 'pie', radius: ['38%','62%'], center: ['38%','50%'],
-      avoidLabelOverlap: true,
+    series: [{ type: 'pie', radius: ['38%','62%'], center: ['38%','50%'], avoidLabelOverlap: true,
       itemStyle: { borderColor: '#02060f', borderWidth: 2 },
       label: { show: false }, labelLine: { show: false },
-      data: [
-        { value: 1048, name: '搜索引擎', itemStyle:{color:COLOR.cyan} },
+      data: [{ value: 1048, name: '搜索引擎', itemStyle:{color:COLOR.cyan} },
         { value: 735, name: '直接访问', itemStyle:{color:COLOR.blue} },
         { value: 580, name: '社交媒体', itemStyle:{color:COLOR.purple} },
         { value: 484, name: '外部链接', itemStyle:{color:COLOR.gold} },
-        { value: 300, name: '邮件营销', itemStyle:{color:COLOR.green} }
-      ]
-    }]
+        { value: 300, name: '邮件营销', itemStyle:{color:COLOR.green} }] }]
   });
 
   // 6) 环形占比
   initChart('chartRing', {
     tooltip: { trigger: 'item', backgroundColor: 'rgba(2,10,30,0.9)', borderColor: COLOR.cyan, textStyle: { color: '#fff' } },
     legend: { bottom: 0, textStyle: { color: COLOR.text, fontSize: 11 }, itemWidth: 8, itemHeight: 8 },
-    series: [{
-      type: 'pie', radius: ['55%','75%'], center: ['50%','45%'],
-      avoidLabelOverlap: true,
+    series: [{ type: 'pie', radius: ['55%','75%'], center: ['50%','45%'], avoidLabelOverlap: true,
       itemStyle: { borderColor: '#02060f', borderWidth: 2 },
       label: { color: COLOR.text, fontSize: 11, formatter: '{b}\n{d}%' },
-      data: [
-        { value: 1048, name: '线上', itemStyle:{color:COLOR.cyan} },
+      data: [{ value: 1048, name: '线上', itemStyle:{color:COLOR.cyan} },
         { value: 735, name: '线下', itemStyle:{color:COLOR.blue} },
-        { value: 580, name: '代理', itemStyle:{color:COLOR.purple} }
-      ]
-    }]
+        { value: 580, name: '代理', itemStyle:{color:COLOR.purple} }] }]
   });
 
   // 7) 雷达
   initChart('chartRadar', {
     tooltip: { backgroundColor: 'rgba(2,10,30,0.9)', borderColor: COLOR.cyan, textStyle: { color: '#fff' } },
-    radar: {
-      indicator: [
-        { name: '销售', max: 100 },
-        { name: '运营', max: 100 },
-        { name: '服务', max: 100 },
-        { name: '创新', max: 100 },
-        { name: '品牌', max: 100 },
-        { name: '成本', max: 100 }
-      ],
-      shape: 'polygon',
-      splitNumber: 4,
-      axisName: { color: COLOR.text, fontSize: 11 },
+    radar: { indicator: [{name:'销售',max:100},{name:'运营',max:100},{name:'服务',max:100},{name:'创新',max:100},{name:'品牌',max:100},{name:'成本',max:100}],
+      shape: 'polygon', splitNumber: 4, axisName: { color: COLOR.text, fontSize: 11 },
       splitLine: { lineStyle: { color: 'rgba(0,229,255,0.2)' } },
       splitArea: { areaStyle: { color: ['rgba(0,229,255,0.04)','rgba(0,229,255,0.01)'] } },
-      axisLine: { lineStyle: { color: 'rgba(0,229,255,0.3)' } }
-    },
-    series: [{
-      type: 'radar',
-      areaStyle: { color: 'rgba(0,229,255,0.25)' },
+      axisLine: { lineStyle: { color: 'rgba(0,229,255,0.3)' } } },
+    series: [{ type: 'radar', areaStyle: { color: 'rgba(0,229,255,0.25)' },
       lineStyle: { width: 2, color: COLOR.cyan, shadowBlur: 8, shadowColor: COLOR.cyan },
       itemStyle: { color: COLOR.cyan },
-      data: [{ value: [88, 76, 82, 70, 80, 68], name: '本季度' }]
-    }]
+      data: [{ value: [88, 76, 82, 70, 80, 68], name: '本季度' }] }]
   });
 
   // 8) 横向柱
@@ -576,43 +595,43 @@
     grid: { left: 70, right: 30, top: 10, bottom: 10, containLabel: true },
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, backgroundColor: 'rgba(2,10,30,0.9)', borderColor: COLOR.cyan, textStyle: { color: '#fff' } },
     xAxis: { type: 'value', show: false },
-    yAxis: {
-      type: 'category',
-      data: ['家电','服饰','数码','食品','美妆'],
-      axisLine: { show: false }, axisTick: { show: false },
-      axisLabel: { color: COLOR.text, fontSize: 11 }
-    },
-    series: [{
-      type: 'bar', barWidth: 10,
-      data: [92, 81, 74, 62, 55],
-      itemStyle: {
-        borderRadius: [0, 5, 5, 0],
-        color: function(p) {
-          const c = [COLOR.cyan, COLOR.blue, COLOR.purple, COLOR.gold, COLOR.green][p.dataIndex];
-          return new echarts.graphic.LinearGradient(0,0,1,0, [
-            { offset: 0, color: c + '20' },
-            { offset: 1, color: c }
-          ]);
-        }
-      },
-      label: { show: true, position: 'right', color: '#fff', formatter: '{c}%', fontSize: 11 }
-    }]
+    yAxis: { type: 'category', data: ['家电','服饰','数码','食品','美妆'], axisLine: { show: false }, axisTick: { show: false }, axisLabel: { color: COLOR.text, fontSize: 11 } },
+    series: [{ type: 'bar', barWidth: 10, data: [92, 81, 74, 62, 55],
+      itemStyle: { borderRadius: [0, 5, 5, 0],
+        color: function(p) { const c = [COLOR.cyan, COLOR.blue, COLOR.purple, COLOR.gold, COLOR.green][p.dataIndex];
+          return new echarts.graphic.LinearGradient(0,0,1,0, [{offset:0,color:c+'20'},{offset:1,color:c}]); } },
+      label: { show: true, position: 'right', color: '#fff', formatter: '{c}%', fontSize: 11 } }]
+  });
+
+  // 9) 实时交易流 (动态散点)
+  initChart('chartScatter', {
+    grid: { left: 40, right: 16, top: 16, bottom: 24, containLabel: true },
+    tooltip: { trigger: 'item', backgroundColor: 'rgba(2,10,30,0.9)', borderColor: COLOR.cyan, textStyle: { color: '#fff' },
+      formatter: p => `时间：${p.value[0]}<br/>金额：${p.value[1]} 元<br/>类型：${p.seriesName}` },
+    xAxis: { type: 'category', data: Array.from({length:24},(_,i)=>`${i}h`),
+      axisLine: { lineStyle: { color: COLOR.axis } }, axisLabel: { color: COLOR.sub, fontSize: 10 } },
+    yAxis: { type: 'value', name: '金额(元)', nameTextStyle: { color: COLOR.sub, fontSize: 10 },
+      axisLine: { show: false },
+      splitLine: { lineStyle: { color: 'rgba(0,229,255,0.08)' } }, axisLabel: { color: COLOR.sub, fontSize: 10 } },
+    series: [
+      { name: '正向', type: 'scatter', symbolSize: d => Math.max(4, d[1] / 800),
+        itemStyle: { color: COLOR.green, shadowBlur: 8, shadowColor: COLOR.green, opacity: 0.85 },
+        data: Array.from({length:24},(_,i)=>[`${i}h`, rnd(200, 8000)]) },
+      { name: '退款', type: 'scatter', symbolSize: d => Math.max(4, d[1] / 1500),
+        itemStyle: { color: COLOR.red, shadowBlur: 8, shadowColor: COLOR.red, opacity: 0.85 },
+        data: Array.from({length:24},(_,i)=>[`${i}h`, rnd(50, 2000)]) }
+    ]
   });
 
   /* ============================================================
    * 五、TOP10 滚动榜单
    * ========================================================== */
   const RANK_DATA = [
-    { name: '张明远', num: 286540, bar: '95%' },
-    { name: '李欣怡', num: 268120, bar: '88%' },
-    { name: '王建国', num: 247890, bar: '82%' },
-    { name: '陈思琪', num: 221350, bar: '76%' },
-    { name: '刘雨欣', num: 208720, bar: '71%' },
-    { name: '赵子轩', num: 196430, bar: '67%' },
-    { name: '孙晓东', num: 182650, bar: '62%' },
-    { name: '周佳慧', num: 171280, bar: '58%' },
-    { name: '吴俊豪', num: 158940, bar: '54%' },
-    { name: '郑文静', num: 146720, bar: '50%' }
+    { name: '张明远', num: 286540, bar: '95%' },{ name: '李欣怡', num: 268120, bar: '88%' },
+    { name: '王建国', num: 247890, bar: '82%' },{ name: '陈思琪', num: 221350, bar: '76%' },
+    { name: '刘雨欣', num: 208720, bar: '71%' },{ name: '赵子轩', num: 196430, bar: '67%' },
+    { name: '孙晓东', num: 182650, bar: '62%' },{ name: '周佳慧', num: 171280, bar: '58%' },
+    { name: '吴俊豪', num: 158940, bar: '54%' },{ name: '郑文静', num: 146720, bar: '50%' }
   ];
   const rankList = document.getElementById('rankList');
   function renderRank() {
@@ -624,11 +643,9 @@
         <div class="bar">${r.bar}</div>
       </div>
     `).join('');
-    rankList.innerHTML = html + html; // 复制一份用于无缝滚动
+    rankList.innerHTML = html + html;
   }
   renderRank();
-
-  // 滚动动画
   let scrollY = 0, scrollPaused = false, itemH = 36;
   function rankLoop() {
     if (!scrollPaused) {
@@ -639,7 +656,6 @@
     requestAnimationFrame(rankLoop);
   }
   rankLoop();
-  // 悬停暂停
   document.querySelector('.rank').addEventListener('mouseenter', () => scrollPaused = true);
   document.querySelector('.rank').addEventListener('mouseleave', () => scrollPaused = false);
 
@@ -653,13 +669,11 @@
     function resize() {
       W = cvs.width = window.innerWidth;
       H = cvs.height = window.innerHeight;
-      const n = Math.min(120, Math.floor(W * H / 14000));
+      const n = Math.min(140, Math.floor(W * H / 13000));
       dots = Array.from({ length: n }, () => ({
-        x: Math.random() * W,
-        y: Math.random() * H,
+        x: Math.random() * W, y: Math.random() * H,
         r: Math.random() * 1.6 + 0.4,
-        vx: (Math.random() - 0.5) * 0.2,
-        vy: -Math.random() * 0.3 - 0.05,
+        vx: (Math.random() - 0.5) * 0.2, vy: -Math.random() * 0.3 - 0.05,
         a: Math.random() * 0.6 + 0.2
       }));
     }
